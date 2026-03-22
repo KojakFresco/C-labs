@@ -7,11 +7,15 @@
 #include <string.h>
 #include <time.h>
 #include "sort.h"
+#include <windows.h>
 
 #define N 10
 #define MAX_LEN 50
 
 int main() {
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
     char keys[N][MAX_LEN];
     char data[N][MAX_LEN];
 
