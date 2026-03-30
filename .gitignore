@@ -1,0 +1,4 @@
+.idea
+*.exe
+obj/
+obj_debug/
