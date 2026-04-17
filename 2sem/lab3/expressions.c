@@ -67,8 +67,9 @@ Node* simplify_node(Node* root) {
             if (root->right != NULL && root->right->type == NUMBER && root->right->data.number == 0) {
                 free(root->right);
                 free(root->left);
+                Node* new_root = new_node(NUMBER, "0", root->parent, NULL, NULL);
                 free(root);
-                return NULL;
+                return new_root;
             }
             Node* new_root = root->right;
             new_root->parent = root->parent;
@@ -89,8 +90,9 @@ Node* simplify_node(Node* root) {
             if (root->right != NULL && root->right->type == NUMBER && root->right->data.number == 0) {
                 free(root->right);
                 free(root->left);
+                Node* new_root = new_node(NUMBER, "0", root->parent, NULL, NULL);
                 free(root);
-                return NULL;
+                return new_root;
             }
             Node* new_root = new_node(UNARY, "-", root->parent, NULL, root->right);
             free(root->left);
@@ -98,9 +100,15 @@ Node* simplify_node(Node* root) {
             return new_root;
         }
         if (root->right != NULL && root->right->type == NUMBER && root->right->data.number == 0) {
-            Node* new_root = root->left;
-            new_root->parent = root->parent;
-            free(root->right);
+            Node* new_root;
+            if (root->type != UNARY) {
+                new_root = root->left;
+                new_root->parent = root->parent;
+                free(root->right);
+            } else {
+                new_root = root->right;
+                new_root->parent = root->parent;
+            }
             free(root);
             return new_root;
         }
@@ -235,7 +243,7 @@ char* postfix_notation(char** tokens) {
 
     int i = 0;
     while (tokens[i] != NULL) {
-        if (tokens[i][0] == '-' && (i == 0 || !is_operand(tokens[i-1]))) {
+        if (tokens[i][0] == '-' && (i == 0 || (!is_operand(tokens[i-1]) && tokens[i-1][0] != ')'))) {
             push(stack, "~");
         } else if (is_operand(tokens[i])) {
             if (!append_token_to_buffer(&out, &out_capacity, &out_length, tokens[i])) {

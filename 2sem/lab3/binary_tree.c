@@ -29,7 +29,7 @@ static void print_node(Node* root, int depth) {
         return;
     }
     for (int i = 0; i < depth; i++) {
-        printf(" ");
+        printf("|");
     }
     switch (root->type) {
         case NUMBER:
@@ -67,6 +67,12 @@ Node* new_node(NodeType type, char* data, Node* parent, Node* left, Node* right)
     new->parent = parent;
     new->left = left;
     new->right = right;
+    if (left != NULL) {
+        left->parent = new;
+    }
+    if (right != NULL) {
+        right->parent = new;
+    }
     return new;
 }
 
@@ -86,7 +92,6 @@ Tree* init_tree(Node* root) {
 // }
 //
 void print(Tree* tree) {
-    printf("left\nright\n");
     print_node(tree->root, 0);
 }
 

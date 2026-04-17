@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static Node* add_node(Node* root, int data, Node* parent) {
+static StackNode* add_node(StackNode* root, int data, StackNode* parent) {
     if (root == NULL) {
-        Node* new = malloc(sizeof(Node));
+        StackNode* new = malloc(sizeof(StackNode));
         if (new == NULL) {
             printf("Memory allocation failed\n");
             return NULL;
@@ -23,7 +23,7 @@ static Node* add_node(Node* root, int data, Node* parent) {
     return root;
 }
 
-static void print_node(Node* root, int depth) {
+static void print_node(StackNode* root, int depth) {
     if (root == NULL) {
         return;
     }
@@ -35,13 +35,13 @@ static void print_node(Node* root, int depth) {
     print_node(root->right, depth + 1);
 }
 
-static Node* delete_node(Node* root, int data) {
+static StackNode* delete_node(StackNode* root, int data) {
     if (root == NULL) {
         printf("No such element\n");
         return root;
     }
     if (root->data == data) {
-        Node* new_root = root->right;
+        StackNode* new_root = root->right;
         if (new_root == NULL) {
             new_root = root->left;
             if (new_root == NULL) {
@@ -68,7 +68,7 @@ static Node* delete_node(Node* root, int data) {
     return root;
 }
 
-static int root_depth(Node* root, int cur_depth) {
+static int root_depth(StackNode* root, int cur_depth) {
     if (root == NULL) {
         return cur_depth;
     }

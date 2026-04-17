@@ -6,10 +6,10 @@ typedef struct node {
     struct node* right;
     struct node* parent;
     int data;
-} Node;
+} StackNode;
 
 typedef struct {
-    Node* root;
+    StackNode* root;
 } Tree;
 
 Tree* init_tree();

@@ -22,11 +22,19 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <windows.h>
 
 #include "expressions.h"
 
 int main() {
-    char** tokens = parse_expression("12 * 0 + 0 - 18 * (9 + 0) / (12 + 1)");
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
+    char str[100];
+    printf("Введите строку (не более 100 символов): ");
+    scanf("%99[^\n]", str);
+
+    char** tokens = parse_expression(str);
     if (tokens == NULL) {
         printf("Error\n");
         return -1;
@@ -37,15 +45,20 @@ int main() {
         printf("'%s' ", tokens[i]);
         i++;
     }
+
     char* postfix = postfix_notation(tokens);
     printf("\n\nPostfix notation: %s\n", postfix);
+
     Tree* tree = postfix_to_tree(postfix);
     printf("\nPostfix tree: \n");
     print(tree);
+
     Tree* simplified = simplify(tree);
     printf("\nSimplified tree: \n");
     print(simplified);
+
     printf("\nSimplified expression: ");
     print_expression(simplified);
+
     return 0;
 }

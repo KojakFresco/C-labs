@@ -2,11 +2,13 @@
 #include <math.h>
 
 double fun1(double x) {
-    return exp(x) + log(x) - 10*x;
+    //return exp(x) + log(x) - 10*x;
+    return sin(x) - 1;
 }
 
 double fun1s(double x) {
-    return (exp(x) + log(x))/10;
+    //return (exp(x) + log(x))/10;
+    return asin(1);
 }
 
 double fun21(double x) {
@@ -27,7 +29,7 @@ double sec_der(double (*fun)(double),  double x) {
     return (der(fun, x + dx) - der(fun, x)) / dx;
 }
 double newton(double (*fun)(double), double a, double b) {
-    double eps = 10e-15;
+    double eps = 1e-15;
     double x = (a + b) / 2;
 
     if (fabs(fun(x) * sec_der(fun, x)) >= pow(der(fun, x), 2)) {
