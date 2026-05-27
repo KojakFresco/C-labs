@@ -23,3 +23,18 @@ TEST(Dijkstra, SmallGraph) {
     destroy_graph(g);
 }
 
+TEST(Dijkstra, DisconnectedGraph) {
+    Graph* g = init_graph();
+    ASSERT_NE(g, nullptr);
+    add_edge(g, 0, 1, 1);
+    add_edge(g, 1, 2, 2);
+    // Вершина 3 изолирована
+    long long* d = dijkstra(g, 0);
+    ASSERT_NE(d, nullptr);
+    EXPECT_EQ(d[0], 0);
+    EXPECT_EQ(d[1], 1);
+    EXPECT_EQ(d[2], 3);
+    EXPECT_EQ(d[3], LLONG_MAX);
+    free(d);
+    destroy_graph(g);
+}

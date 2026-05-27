@@ -44,14 +44,16 @@ static void print_system_info(void) {
     printf("# Platform: Windows\n");
     printf("# CPU: %s\n", cpu);
     printf("# LogicalProcessors: %u\n", si.dwNumberOfProcessors);
-    printf("# RAM_bytes: %llu\n", (unsigned long long)ms.ullTotalPhys);
+    double ram_gb = (double)ms.ullTotalPhys / (1024.0 * 1024.0 * 1024.0);
+    printf("# RAM: %.2f GB\n", ram_gb);
 #else
     long proc = sysconf(_SC_NPROCESSORS_ONLN);
     long pages = sysconf(_SC_PHYS_PAGES);
     long page_size = sysconf(_SC_PAGESIZE);
+    double ram_gb = (double)pages * (double)page_size / (1024.0 * 1024.0 * 1024.0);
     printf("# Platform: POSIX\n");
     printf("# LogicalProcessors: %ld\n", proc);
-    printf("# RAM_bytes: %lld\n", (long long)pages * (long long)page_size);
+    printf("# RAM: %.2f GB\n", ram_gb);
 #endif
 }
 
@@ -72,12 +74,17 @@ static double median_of_copy(const double *a, int n) {
 }
 
 int main(int argc, char **argv) {
-    const int sizes[][2] = { {1000, 5000}, {2000, 10000}, {5000, 25000} };
+    int sizes[100][2];
     const int count = sizeof(sizes) / sizeof(sizes[0]);
 
     int runs = 5;
     int warmups = 1;
     unsigned int seed = 12345;
+
+    for (int i = 0; i < 100; i++) {
+        sizes[i][0] = 500*i;
+        sizes[i][1] = 2500*i;
+    }
 
     for (int i = 1; i < argc; ++i) {
         if (strcmp(argv[i], "--runs") == 0 && i + 1 < argc) runs = atoi(argv[++i]);
@@ -135,7 +142,7 @@ int main(int argc, char **argv) {
         double stddev = sqrt(var / runs);
         double med = median_of_copy(times, runs);
 
-        printf("%d,%d,%.3f,%.3f,%.3f,\"", n, m, mean, med, stddev);
+        printf("%d %lf %lf %lf \"", n, mean, med, stddev);
         for (int i = 0; i < runs; ++i) {
             if (i) printf(";");
             printf("%.3f", times[i]);

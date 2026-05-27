@@ -1,5 +1,4 @@
 #include "../priority_queue.h"
-
 #include <gtest/gtest.h>
 
 TEST(PriorityQueue, PushPopOrder) {
@@ -24,3 +23,10 @@ TEST(PriorityQueue, PushPopOrder) {
     free_queue(q);
 }
 
+TEST(PriorityQueue, PopFromEmpty) {
+    PriorityQueue* q = init_queue();
+    ASSERT_NE(q, nullptr);
+    Pair out;
+    EXPECT_EQ(pop(q, &out), -1);
+    free_queue(q);
+}
