@@ -17,8 +17,8 @@ to_suffix() {
     local result=""
     for (( i=0; i<length; i++ )); do
         local rem=$((num % 26))
-	result="${chars[rem]}$result"
-	num=$((num / 26))
+        result="${chars[rem]}$result"
+        num=$((num / 26))
     done
 
     echo "$result" 
@@ -88,25 +88,25 @@ if [[ -n "$lines" ]]; then
     fi
     mapfile -t lines_arr < "$input_file"
     for (( file=0; file<needed_files; file++ )); do
-	suffix=$(to_suffix $file)
-	out_file="$prefix$suffix"
-	> "$out_file"
-	for (( l=0; l<lines; l++ )); do
-	    if (( file*lines+l >= line_count )); then 
-	        break
-	    fi
-	    printf '%s\n' "${lines_arr[file*lines+l]}" >> "$out_file"
-	done
+        suffix=$(to_suffix $file)
+        out_file="$prefix$suffix"
+        > "$out_file"
+        for (( l=0; l<lines; l++ )); do
+            if (( file*lines+l >= line_count )); then
+                break
+            fi
+            printf '%s\n' "${lines_arr[file*lines+l]}" >> "$out_file"
+        done
     done
 else
     if [[ "${bytes: -1}" == "M" ]]; then
         bytes_count=$(( "${bytes:0:-1}"*1024*1024 ))
     elif [[ "${bytes: -1}" == "K" ]]; then
-	bytes_count=$(( "${bytes:0:-1}"*1024 ))
+        bytes_count=$(( "${bytes:0:-1}"*1024 ))
     elif [[ "${bytes: -1}" == "B" ]]; then
-	bytes_count="${bytes:0:-1}"
+        bytes_count="${bytes:0:-1}"
     else
-	bytes_count="$bytes"
+        bytes_count="$bytes"
     fi
 
     file_size=$(stat -c%s "$input_file")
@@ -121,7 +121,6 @@ else
         suffix=$(to_suffix $file)
         out_file="$prefix$suffix"
         > "$out_file"
-
-	dd if="$input_file" of="$out_file" bs="$bytes_count" skip="$file" count="1" status=none
+        dd if="$input_file" of="$out_file" bs="$bytes_count" skip="$file" count="1" status=none
     done
 fi
