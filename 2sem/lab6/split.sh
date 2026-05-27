@@ -71,6 +71,16 @@ if [[ -n "$input_file" &&  ! -s "$input_file"  ]]; then
     exit 1
 fi
 
+if [[ -n "$lines" && ! $lines =~ ^[1-9][0-9]*$ ]]; then 
+    echo "Error: lines count should be a positive number"
+    exit 1
+fi
+
+if [[ -n "$bytes" && ! $bytes =~ ^[1-9][0-9]*[MKB]?$ ]]; then
+    echo "Error: bytes count should be positive number with correct suffix (B/K/M)"
+    exit 1
+fi
+
 if [[ -z "$input_file" ]]; then
     temp_file=$(mktemp)
     trap 'rm -f "$temp_file"' EXIT
